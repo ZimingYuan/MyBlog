@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/><meta content="width=device-width initial-scale=1" name="viewport"/>
+
+<link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+</link><title>使用OpenCV对图片进行特征点检测和匹配（C++）</title><link href="https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css"/><style type="text/css">html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none 0s ease 0s; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background: inherit; }
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/* open-sans-regular - latin-ext_latin */
+  /* open-sans-italic - latin-ext_latin */
+    /* open-sans-700 - latin-ext_latin */
+    /* open-sans-700italic - latin-ext_latin */
+  html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<div class="container">
+<a class="navbar-brand" href="#">ZimingYuan的博客</a>
+<div class="navbar-collapse">
+<ul class="navbar-nav">
+<li class="nav-item active">
+<a class="nav-link" href="/index.html">首页</a>
+</li>
+<li class="nav-item active">
+<a class="nav-link" href="/html/随笔.html">随笔</a>
+</li>
+<li class="nav-item active">
+<a class="nav-link" href="https://github.com/ZimingYuan" target="_Blank">GitHub</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+
+<div class="" id="write"><h2><a class="md-header-anchor" name="使用opencv对图片进行特征点检测和匹配c）"></a><span>使用OpenCV对图片进行特征点检测和匹配（C++）</span></h2><h3><a class="md-header-anchor" name="背景"></a><span>背景</span></h3><p><span>最近从不同网站下载了非常多的动漫壁纸，其中有一些内容相同，但是大小、背景颜色、色调、主人公的位置不同（例子如下）。正因为如此，基础的均方误差、直方图检测等方法很难识别出这些相似的图片。</span></p><p><img alt="图片1" referrerpolicy="no-referrer" src="https://cdn.popular-themes.com/charlotte/image21.jpg"/></p><p><img alt="图片2" referrerpolicy="no-referrer" src="https://freeaddon.com/wallpaper/charlotte/bg-38.jpg"/></p><h3><a class="md-header-anchor" name="思路"></a><span>思路</span></h3><p><span>OpenCV中有很多用来对特征点进行检测和计算的函数，这些函数能够利用像素点及其周围的灰度检测其是否是图像中的特征点，并计算出它的信息，比如ORB、SIFT、SURF、AKANA。同时OpenCV还有一些利用特征点的信息对特征点进行匹配的算法，比如BF、FLANN。我们可以先把参与匹配的每个图片的特征点和信息计算出来，然后对图片两两进行特征点匹配，如果两幅图片匹配上的特征点数量超过一个定值，即认为这两个图片相似。这种方法因为是直接对图像的特征进行考虑，因此对于大小、色调、主人公的位置不同的相似图片也能很好的匹配。</span></p><p><span>对于特征点检测，这些算法分为两类，一类输出的特征点信息是二进制串，包括ORB、AKANA等，一类输出的特征点信息是浮点数，包括SIFT、SURF，但是SIFT和SURF这两个算法是有专利的，商用要付钱，所以OpenCV把它们放进了Contrib扩展包里面，如果你用的是python版的OpenCV，必须下载3.4.2.16版本的opencv-contrib-python才能用OpenCV里的SIFT和SURF函数。我用的是C++版本的OpenCV，你需要下载OpenCV的源码和OpenCV-contrib扩展包然后自己编译，很麻烦，所以我选择的是ORB。对于特征点匹配，FLANN不论效率还是效果都比BF好很多（当然也有可能是我BF没用对），但是网上很多教程（包括OpenCV自己的文档）都是ORB配BF，SIFT配FLANN，StackOverflow也有人问ORB怎么搭配FLANN使用，有的回答直接说特征点信息是整数的算法不能搭配FLANN，但幸好这个问题下的另一个人给出了FLANN搭配ORB时的参数，（</span><a class="url" href="https://stackoverflow.com/questions/43830849/opencv-use-flann-with-orb-descriptors-to-match-features" target="_blank">https://stackoverflow.com/questions/43830849/opencv-use-flann-with-orb-descriptors-to-match-features</a><span>）这也说明了这个问题还是被很多人忽视的，毕竟当今世界是深度学习的天下，很少人去关注这些传统算法了。</span></p><p><span>这个程序效率比较低，需要进行一些优化。首先我们用于求特征点和匹配的图片应该是原图的灰度图经过缩小后的版本，同时注意这个操作不要用cv::resize完成，不然会慢很多，直接在imread的时候指定第二个参数为cv::IMREAD_REDUCE_COLOR_4可以在读入图片的同时缩小。当然，瓶颈还是在那个两两匹配的二重循环里，为了减少FLANN的操作，我先预处理出图像各个通道的平均值，用这个值来大致表示这个图像的色调，在二重循环中，如果两个图片的平均值相差太大（我设置的是60），就认为它们不相似，不进行特征点匹配，当然这样会导致多出不少漏网之鱼，不过实践证明这样做大部分相似的图片还是不会被筛掉的，而且速度也提高了很多。</span></p><h3><a class="md-header-anchor" name="代码"></a><span>代码</span></h3><pre class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c++" spellcheck="false" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c++"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocapitalize="off" autocorrect="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#include &lt;io.h&gt;</span></span></pre></div><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#include &lt;ctime&gt;</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#include &lt;vector&gt;</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#include &lt;opencv2/opencv.hpp&gt;</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable-3">bool</span> <span class="cm-def">judge</span>(<span class="cm-variable">cv::Scalar</span> <span class="cm-operator">&amp;</span><span class="cm-variable">a</span>, <span class="cm-variable">cv::Scalar</span> <span class="cm-operator">&amp;</span><span class="cm-variable">b</span>, <span class="cm-variable-3">int</span> <span class="cm-variable">num</span>) {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">return</span> <span class="cm-variable">std::abs</span>(<span class="cm-variable">a</span>[<span class="cm-number">0</span>] <span class="cm-operator">-</span> <span class="cm-variable">b</span>[<span class="cm-number">0</span>]) <span class="cm-operator">&lt;</span> <span class="cm-variable">num</span> <span class="cm-operator">&amp;&amp;</span> <span class="cm-variable">std::abs</span>(<span class="cm-variable">a</span>[<span class="cm-number">1</span>] <span class="cm-operator">-</span> <span class="cm-variable">b</span>[<span class="cm-number">1</span>]) <span class="cm-operator">&lt;</span> <span class="cm-variable">num</span> <span class="cm-operator">&amp;&amp;</span> <span class="cm-variable">std::abs</span>(<span class="cm-variable">a</span>[<span class="cm-number">2</span>] <span class="cm-operator">-</span> <span class="cm-variable">b</span>[<span class="cm-number">2</span>]) <span class="cm-operator">&lt;</span> <span class="cm-variable">num</span>; <span class="cm-number">8</span> }</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable-3">int</span> <span class="cm-def">main</span>() {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">clock_t</span> <span class="cm-variable">start</span> <span class="cm-operator">=</span> <span class="cm-variable">clock</span>(); <span class="cm-comment">//计时开始</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::String</span><span class="cm-operator">&gt;</span> <span class="cm-variable">filelist</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">typedef</span> <span class="cm-variable">std::tuple</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::String</span>, <span class="cm-variable">cv::String</span>, <span class="cm-variable-3">int</span><span class="cm-operator">&gt;</span> <span class="cm-variable">data</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::KeyPoint</span><span class="cm-operator">&gt;&gt;</span> <span class="cm-variable">kplist</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::Mat</span><span class="cm-operator">&gt;</span> <span class="cm-variable">deslist</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::Scalar</span><span class="cm-operator">&gt;</span> <span class="cm-variable">averagebgr</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">data</span><span class="cm-operator">&gt;</span> <span class="cm-variable">same</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">_finddata_t</span> <span class="cm-variable">fd</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">intptr_t</span> <span class="cm-variable">pf</span> <span class="cm-operator">=</span> <span class="cm-variable">_findfirst</span>(<span class="cm-string">"D:/image/*.??g"</span>, <span class="cm-operator">&amp;</span><span class="cm-variable">fd</span>); <span class="cm-variable">filelist</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">cv::String</span>(<span class="cm-string">"D:/宋奕欣/"</span>) <span class="cm-operator">+</span> <span class="cm-variable">fd</span>.<span class="cm-variable">name</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">while</span> (<span class="cm-operator">!</span><span class="cm-variable">_findnext</span>(<span class="cm-variable">pf</span>, <span class="cm-operator">&amp;</span><span class="cm-variable">fd</span>)) <span class="cm-variable">filelist</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">cv::String</span>(<span class="cm-string">"D:/image/"</span>) <span class="cm-operator">+</span> <span class="cm-variable">fd</span>.<span class="cm-variable">name</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">_findclose</span>(<span class="cm-variable">pf</span>); <span class="cm-comment">//列举出图片，这里用的是io.h里的_findfirst和_findnext，通配符.??g筛选出.jpg和.png的文件</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">cv::Ptr</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::ORB</span><span class="cm-operator">&gt;</span> <span class="cm-variable">orb</span> <span class="cm-operator">=</span> <span class="cm-variable">cv::ORB::create</span>();</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">for</span> (<span class="cm-keyword">auto</span> <span class="cm-variable">i</span> : <span class="cm-variable">filelist</span>) {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cv::Mat</span> <span class="cm-variable">imgo</span> <span class="cm-operator">=</span> <span class="cm-variable">cv::imread</span>(<span class="cm-variable">i</span>, <span class="cm-variable">cv::IMREAD_REDUCED_COLOR_4</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">averagebgr</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">cv::mean</span>(<span class="cm-variable">imgo</span>)); <span class="cm-comment">//求各通道平均值</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cv::Mat</span> <span class="cm-variable">img</span>; <span class="cm-variable">cv::cvtColor</span>(<span class="cm-variable">imgo</span>, <span class="cm-variable">img</span>, <span class="cm-variable">cv::COLOR_BGR2GRAY</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">std::vector</span><span class="cm-operator">&lt;</span><span class="cm-variable">cv::KeyPoint</span><span class="cm-operator">&gt;</span> <span class="cm-variable">kp</span>; <span class="cm-variable">cv::Mat</span> <span class="cm-variable">des</span>; <span class="cm-comment">//kp是特征点，des是特征点的信息</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">orb</span><span class="cm-operator">-&gt;</span><span class="cm-variable">detectAndCompute</span>(<span class="cm-variable">img</span>, <span class="cm-variable">cv::Mat</span>(), <span class="cm-variable">kp</span>, <span class="cm-variable">des</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">kplist</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">kp</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">deslist</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">des</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    }</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::cout</span> <span class="cm-operator">&lt;&lt;</span> <span class="cm-string">"Successfully found keypoints."</span> <span class="cm-operator">&lt;&lt;</span> <span class="cm-variable">std::endl</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">cv::FlannBasedMatcher</span> <span class="cm-variable">flann</span>(<span class="cm-variable">cv::makePtr</span><span class="cm-operator">&lt;</span><span class="cm-variable">cv::flann::LshIndexParams</span><span class="cm-operator">&gt;</span>(<span class="cm-number">12</span>, <span class="cm-number">20</span>, <span class="cm-number">2</span>)); <span class="cm-comment">//这个cv::makePtr&lt;cv::flann::LshIndexParams&gt;(12, 20, 2)就是使FLANN能搭配ORB的参数，默认构造函数指定的是随机KD树算法，只能用于SIFT和SURF</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">for</span> (<span class="cm-variable-3">int</span> <span class="cm-variable">i</span> <span class="cm-operator">=</span> <span class="cm-number">0</span>; <span class="cm-variable">i</span> <span class="cm-operator">&lt;</span> <span class="cm-variable">filelist</span>.<span class="cm-variable">size</span>(); <span class="cm-variable">i</span><span class="cm-operator">++</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">for</span> (<span class="cm-variable-3">int</span> <span class="cm-variable">j</span> <span class="cm-operator">=</span> <span class="cm-variable">i</span> <span class="cm-operator">+</span> <span class="cm-number">1</span>; <span class="cm-variable">j</span> <span class="cm-operator">&lt;</span> <span class="cm-variable">filelist</span>.<span class="cm-variable">size</span>(); <span class="cm-variable">j</span><span class="cm-operator">++</span>) {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">if</span> (<span class="cm-operator">!</span><span class="cm-variable">judge</span>(<span class="cm-variable">averagebgr</span>[<span class="cm-variable">i</span>], <span class="cm-variable">averagebgr</span>[<span class="cm-variable">j</span>], <span class="cm-number">60</span>)) <span class="cm-keyword">continue</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">std::vector</span><span class="cm-operator">&lt;</span><span class="cm-variable">cv::KeyPoint</span><span class="cm-operator">&gt;</span> <span class="cm-variable">kpl</span>, <span class="cm-variable">kps</span>; <span class="cm-variable">cv::Mat</span> <span class="cm-variable">desl</span>, <span class="cm-variable">dess</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">kpl</span> <span class="cm-operator">=</span> <span class="cm-variable">kplist</span>[<span class="cm-variable">i</span>]; <span class="cm-variable">desl</span> <span class="cm-operator">=</span> <span class="cm-variable">deslist</span>[<span class="cm-variable">i</span>];</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">kps</span> <span class="cm-operator">=</span> <span class="cm-variable">kplist</span>[<span class="cm-variable">j</span>]; <span class="cm-variable">dess</span> <span class="cm-operator">=</span> <span class="cm-variable">deslist</span>[<span class="cm-variable">j</span>];</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::DMatch</span><span class="cm-operator">&gt;</span> <span class="cm-operator">&gt;</span> <span class="cm-variable">matches</span>; <span class="cm-variable">flann</span>.<span class="cm-variable">knnMatch</span>(<span class="cm-variable">dess</span>, <span class="cm-variable">desl</span>, <span class="cm-variable">matches</span>, <span class="cm-number">2</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">std::vector</span> <span class="cm-operator">&lt;</span><span class="cm-variable">cv::DMatch</span><span class="cm-operator">&gt;</span> <span class="cm-variable">good</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">for</span> (<span class="cm-keyword">auto</span> <span class="cm-variable">k</span> : <span class="cm-variable">matches</span>) {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">                <span class="cm-keyword">if</span> (<span class="cm-variable">k</span>.<span class="cm-variable">size</span>() <span class="cm-operator">&gt;</span> <span class="cm-number">1</span> <span class="cm-operator">&amp;&amp;</span> <span class="cm-variable">k</span>[<span class="cm-number">0</span>].<span class="cm-variable">distance</span> <span class="cm-operator">&lt;</span> <span class="cm-number">0.5</span> <span class="cm-operator">*</span> <span class="cm-variable">k</span>[<span class="cm-number">1</span>].<span class="cm-variable">distance</span>) <span class="cm-variable">good</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">k</span>[<span class="cm-number">0</span>]); <span class="cm-comment">//knnMatch的k=2时，每个Dmatch会返回distance最小的两组匹配，当最小的这两组的distance相差足够大时，较小的那一组才可能是合法匹配</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            }</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">if</span> (<span class="cm-variable">good</span>.<span class="cm-variable">size</span>() <span class="cm-operator">&gt;</span> <span class="cm-number">10</span>) <span class="cm-variable">same</span>.<span class="cm-variable">push_back</span>(<span class="cm-variable">std::make_tuple</span>(<span class="cm-variable">filelist</span>[<span class="cm-variable">i</span>], <span class="cm-variable">filelist</span>[<span class="cm-variable">j</span>], <span class="cm-variable">good</span>.<span class="cm-variable">size</span>()));    </span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-comment">// cv::Mat img; cv::drawMatches(imgs, kps, imgl, kpl, good, img, cv::Scalar(0, 255, 0));</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-comment">// cv::imshow("img", img); cv::waitKey();</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        }</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::sort</span>(<span class="cm-variable">same</span>.<span class="cm-variable">begin</span>(), <span class="cm-variable">same</span>.<span class="cm-variable">end</span>(), [](<span class="cm-variable">data</span> <span class="cm-variable">x</span>, <span class="cm-variable">data</span> <span class="cm-variable">y</span>) {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">return</span> <span class="cm-variable">std::get</span><span class="cm-operator">&lt;</span><span class="cm-number">2</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">x</span>) <span class="cm-operator">&gt;</span> <span class="cm-variable">std::get</span><span class="cm-operator">&lt;</span><span class="cm-number">2</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">y</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    }); <span class="cm-comment">//把匹配的图片按匹配的特征点数排序</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">for</span> (<span class="cm-variable">data</span> <span class="cm-variable">i</span> : <span class="cm-variable">same</span>) {</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">std::cout</span> <span class="cm-operator">&lt;&lt;</span> <span class="cm-variable">std::get</span><span class="cm-operator">&lt;</span><span class="cm-number">0</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">i</span>) <span class="cm-operator">&lt;&lt;</span> <span class="cm-string">' '</span> <span class="cm-operator">&lt;&lt;</span> <span class="cm-variable">std::get</span><span class="cm-operator">&lt;</span><span class="cm-number">1</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">i</span>) <span class="cm-operator">&lt;&lt;</span> <span class="cm-string">' '</span> <span class="cm-operator">&lt;&lt;</span> <span class="cm-variable">std::get</span><span class="cm-operator">&lt;</span><span class="cm-number">2</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">i</span>) <span class="cm-operator">&lt;&lt;</span> <span class="cm-variable">std::endl</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    }</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">std::cout</span> <span class="cm-operator">&lt;&lt;</span> (<span class="cm-variable-3">double</span>)(<span class="cm-variable">clock</span>() <span class="cm-operator">-</span> <span class="cm-variable">start</span>) <span class="cm-operator">/</span> <span class="cm-variable">CLOCKS_PER_SEC</span> <span class="cm-operator">&lt;&lt;</span> <span class="cm-variable">std::endl</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">system</span>(<span class="cm-string">"pause"</span>);</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">return</span> <span class="cm-number">0</span>;</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 1658px;"></div><div class="CodeMirror-gutters" style="display: none; height: 1658px;"></div></div></div></pre><p> </p></div>
+
+<span class="bg-light text-muted border boder-primary d-block p-2 text-center">
+            转载请注明出处<br/>
+            © 2020 ZimingYuan的博客
+        </span>
+<div style="background-color: #ebd5a1; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; opacity: 0.2;">
+</div>
+</body>
+</html>

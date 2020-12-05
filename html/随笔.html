@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+        <title>ZimingYuan的随笔</title>
+        <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.bootcss.com/popper.js/1.12.9/popper.min.js"></script>
+        <script src="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+        <link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">ZimingYuan的博客</a>
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/index.html">首页</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/html/随笔.html">随笔</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="https://github.com/ZimingYuan" target="_Blank">GitHub</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="row mx-5 my-4">
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">powershell下将文件放到剪贴板</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::SetFileDropList('E:\1.txt');
+                        </p>
+                        <p class="card-text">
+                        注意文件路径必须是绝对路径
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+            </div>
+        </div>
+        <div class="row mx-5 my-4">
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">用magick将图片白色处变透明</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            magick src.png -transparent white dst.png
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">powershell下转进制</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                        十进制转二进制
+                        </p>
+                        <p class="card-text text-monospace alert alert-info">
+                            [Convert]::ToString(100, 2)
+                        </p>
+                        <p class="card-text">
+                        二进制转十进制
+                        </p>
+                        <p class="card-text text-monospace alert alert-info">
+                            [Convert]::ToInt32('100', 2)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-5 my-4">
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">vim按编码输入unicode字符</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            &lt;Ctrl-V&gt;U0001f022
+                        </p>
+                        <p class="card-text">
+                        编号为8位的16进制数，在插入模式下输入上述代码得到🀢（麻将“梅”）。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">用Magick合并以“src-”开头图片</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            magick convert +append src-*.png dst.png
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-5 my-4">
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">用Magick给透明的PNG、GIF等图片添加白色背景</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            magick src.png -background white -alpha remove dst.jpg
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">用Curl下载多文件</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            curl -O http://pic.com/pic[01-20]{big, small}.jpg
+                        </p>
+                        <p class="card-text">
+                            <kbd>-O</kbd>表示文件名按url里的
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-5 my-4">
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">用Magick批量转码图片</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            magick mogrify -format jpg *.png
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">中文正则表达式</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            [\u4e00-\u9fa5]
+                        </p>
+                        <p class="card-text">
+                            匹配双字节字符：
+                        </p>
+                        <p class="card-text text-monospace alert alert-info">
+                            [\x00-\xff]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-5 my-4">
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">用vim打开标准输出</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            program | vim -
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow h-100">
+                    <h5 class="card-header">vim换编码保存</h5>
+                    <div class="card-body">
+                        <p class="card-text text-monospace alert alert-info">
+                            :set fenc=gbk
+                        </p>
+                        <p class="card-text">
+                            然后保存。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="bg-light text-muted border boder-primary d-block p-2 text-center">
+            转载请注明出处<br/>
+            © 2020 ZimingYuan的博客
+        </span>
+        <div style="background-color: #ebd5a1; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; opacity: 0.2;">
+    </body>
+</html>

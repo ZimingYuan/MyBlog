@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /audio/
+Disallow: /py/
+Disallow: /img/
+Disallow: /robots.txt
+Allow: /
+Allow: /index.html
+Allow: /html/
+Allow: /index/

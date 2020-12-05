@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/><meta content="width=device-width initial-scale=1" name="viewport"/>
+
+<link href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+</link><title>快速生成网络mp4视频缩略图技术</title><link href="https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css"/><style type="text/css">html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none 0s ease 0s; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+  .typora-export h1::after, .typora-export h2::after, .typora-export h3::after, .typora-export h4::after, .typora-export h5::after, .typora-export h6::after { content: ""; display: block; height: 100px; margin-bottom: -100px; }
+}
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background: inherit; }
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/* open-sans-regular - latin-ext_latin */
+  /* open-sans-italic - latin-ext_latin */
+    /* open-sans-700 - latin-ext_latin */
+    /* open-sans-700italic - latin-ext_latin */
+  html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+
+@media print {
+    .typora-export h1,
+    .typora-export h2 {
+        border-bottom: none;
+        padding-bottom: initial;
+    }
+
+    .typora-export h1::after,
+    .typora-export h2::after {
+        border-top: 1px solid #eee;
+        margin-top: .3em;
+    }
+}
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<div class="container">
+<a class="navbar-brand" href="#">ZimingYuan的博客</a>
+<div class="navbar-collapse">
+<ul class="navbar-nav">
+<li class="nav-item active">
+<a class="nav-link" href="/index.html">首页</a>
+</li>
+<li class="nav-item active">
+<a class="nav-link" href="/html/随笔.html">随笔</a>
+</li>
+<li class="nav-item active">
+<a class="nav-link" href="https://github.com/ZimingYuan" target="_Blank">GitHub</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+
+<div class="" id="write"><h2><a class="md-header-anchor" name="快速生成网络mp4视频缩略图技术"></a><span>快速生成网络mp4视频缩略图技术</span></h2><h3><a class="md-header-anchor" name="背景"></a><span>背景</span></h3><p><span>由于网络原因，在下载视频之前我们往往会希望能够先生成一些视频的缩略图，大致浏览视频内容，再确定是否应花时间下载。如何能够快速得到视频多个帧的缩略图的同时尽量少的下载视频的内容，是一个值得研究的问题。</span></p><h3><a class="md-header-anchor" name="思路"></a><span>思路</span></h3><p><span>众所周知，不考虑音频、字幕的话，视频是由多个图像帧拼接而成的，因此我们的目标也就是尽量只下载视频中我们想下载的帧图片，而忽略其他的信息，那么就需要获得对应帧在文件中所在的位置、大小、以及编码格式，为此，首先需要了解视频容器的格式，由于日常生活中h264编码的mp4格式用得比较多，所以这里只分析采用h264编码的mp4格式。</span></p><p><span>mp4格式的主要组织格式是box，box之间可以相互嵌套，每个box的前8个字节包括box的名字和这个box大小。在我看来，这些box主要分为三类，第一类存储的是整个视频的元信息，像视频的作者、分辨率、帧率等信息，这些信息基本对解码没有影响，所以可以跳过，第二类存储的是编码信息，包括视频的关键帧、帧的大小、视频分块的位置和包含的帧数等信息，这个是我们最关心的信息，需要完整地下载下来。第三类存储的是实际数据，这些我们不用完整下载，可以通过前面的编码信息计算我们所需要的帧在数据box中的位置，然后只下载帧对应的数据就行了，这个操作也是比较简单的。因此，重中之重就是如何分析视频的编码信息。</span></p><p><span>存储视频编码信息的box叫stbl，其下包括以下几个box：</span></p><ul><li><span>stsd：包含了h264编码的一些信息，后面再谈它的作用。</span></li><li><span>stts：包含时间和帧的转换信息，这里我们不需要考虑它。</span></li><li><span>stss：关键帧编号，这个比较重要，因为h264是一种压缩率非常高的编码格式，它把帧分为三类，其中只有一类是完全独立的，另外两类都需要通过周围的帧推算出来。而这里的关键帧，在寻址过后得到的刚好就是h264中的独立帧，也是我们比较需要的。由于关键帧之间的时间差基本一致，所以我们在需要缩略图尽可能在视频中分布均匀的时候，就可以在关键帧列表中均匀地取一定数量的关键帧，只对这些帧进行寻址。</span></li><li><span>stsz：每个帧的数据大小，重要性不言而喻。</span></li><li><span>stsc：每个分块包含帧的数目，注意这个box存储格式是比较简洁的，它会把帧数目相同的连续分块划为一段，只记录每段的起始分块和每个分块包含帧的数目，因此需要自行处理分析。</span></li><li><span>stco：每个分块数据在整个文件中的位置，重要性不言而喻。</span></li></ul><p><span>这样一来，找到一个关键帧的过程大概可以分为以下几步：</span></p><ol start=""><li><span>通过stsc box，不断累加每个分块的帧数，得到所需关键帧在哪个分块中</span></li><li><span>通过stsc box和stsz box，得到所需关键帧在对应分块中的偏移量，需要将分块中排在所需关键帧前面的帧的大小累加起来</span></li><li><span>通过stco box得到分块的偏移量，加上刚才计算得到的所需关键帧的块中偏移量，就是所需关键帧在文件中的偏移量，通过stsz box获得所需关键帧的大小，就能得到完整的所需关键帧数据了。</span></li></ol><p><span>接下来需要考虑的就是得到的关键帧数据，怎么转换为图片。mp4里的视频画面数据用的编码格式是h264，由于h264解码算法非常复杂，因此我使用ffmpeg程序来进行这一操作。但是，直接从mp4里提取出来的关键帧数据并不能被ffmpeg的h264解码器所识别。这是因为h264的格式分为两类，一类叫Annex-B，称为h264裸流，可以直接被各类解码器、播放器处理和播放；一类叫AVCC，通常使用h264编码的mp4、avi等视频容器中的画面数据用的就是这个格式。也就是说，提取出来的关键帧数据是AVCC格式，需要将其转换为Annex-B格式，才能被ffmpeg转码成png之类的格式。</span></p><p><span>那么这两个格式有什么不同吗？h264格式的视频流都是由一个个NAL包组成的，每个NAL包可能是帧数据，也可能是其他一些数据，在Annex-B中，其他数据的NAL包头部为00 00 00 01四个字节，帧数据的NAL包头部为由00 00 00 01分隔的PPS和SPS字节串，这两种字节串里存储了帧的分辨率等信息，使解码器能够正确解析h264流。而AVCC的NAL包的前四个字节一律为该NAL包的大小。那么AVCC格式的h264流在mp4容器里是怎么被正确解码的呢？原来它的SPS和PPS字节串存在前面所述的stsd box中，所以将AVCC转换成Annex-B的方法就是将其每个NAL包的前四个字节进行替换，如果该包存储其他数据，就将前四个字节改为00 00 00 01，否则改成由00 00 00 01分隔的PPS和SPS字节串。通常存储帧数据的NAL包第5个字节为0x65，可以由此判断。</span></p><p><span>于是整个程序的流程就很清晰了，每次下载当前box的名字和大小（前8个字节），如果这个box是编码相关box的父box就进入，否则就跳过，当到达对应的box时则下载需要的信息。接着在关键帧列表中尽量均匀地选取关键帧，然后找到这些关键帧对应的数据位置把它们下载下来，将数据由AVCC转换成Annex-B，然后运行ffmpeg将数据帧转换成图片格式。下载文件片段可以使用HTTP请求里的Range头，为了加快速度，一些能够并行的操作可以用多线程来处理。</span></p><h3><a class="md-header-anchor" name="代码"></a><span>代码</span></h3><pre class="md-fences md-end-block ty-contain-cm modeLoaded" lang="python" spellcheck="false" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="python"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocapitalize="off" autocorrect="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="0"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><span><span>​</span>x</span></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">sys</span></span></pre></div><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">struct</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">requests</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">import</span> <span class="cm-variable">subprocess</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">from</span> <span class="cm-variable">multiprocessing</span>.<span class="cm-property">dummy</span> <span class="cm-keyword">import</span> <span class="cm-variable">Pool</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">img_num</span> = <span class="cm-number">240</span> <span class="cm-comment"># 缩略图数量</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">url</span> = <span class="cm-string">'https://...'</span> <span class="cm-comment"># 视频地址</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">path</span> = <span class="cm-string">'D:\\tmp\\'</span> <span class="cm-comment"># 下载路径</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">now</span> = <span class="cm-number">0</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">small</span> = <span class="cm-builtin">set</span>([<span class="cm-string">'moov'</span>, <span class="cm-string">'trak'</span>, <span class="cm-string">'mdia'</span>, <span class="cm-string">'minf'</span>, <span class="cm-string">'stbl'</span>]) <span class="cm-comment"># 需要“进入”的box名</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">sample2chunk</span> = [] <span class="cm-comment"># stsc box中每一段的起始chunk和帧数</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">chunk_offset</span> = [] <span class="cm-comment"># 分块在文件中的地址</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">sample_size</span> = [] <span class="cm-comment"># 帧大小</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">key_sample</span> = [] <span class="cm-comment"># 选取的关键帧</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">frames</span> = [] <span class="cm-comment"># 选取的关键帧在文件中的偏移和大小</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">cnt</span> = <span class="cm-number">5</span> <span class="cm-comment"># 待下载的box的数目</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">sps</span> = <span class="cm-string">b''</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">pps</span> = <span class="cm-string">b''</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">requestnum</span> = <span class="cm-number">0</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">def</span> <span class="cm-def">getrange</span>(<span class="cm-variable">start</span>, <span class="cm-variable">length</span>):</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">global</span> <span class="cm-variable">requestnum</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">requestnum</span> += <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">while</span> <span class="cm-keyword">True</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">r</span> = <span class="cm-variable">os</span>.<span class="cm-property">system</span>(<span class="cm-string">f'curl -H "Range: bytes={start}-{start + length - 1}" {url} --output {path}temp{start}.bin -m {60 + length // 4000} -f'</span>) <span class="cm-comment"># 这里运行curl来下载，指定了下载重试时间</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">if</span> <span class="cm-variable">r</span> == <span class="cm-number">0</span>: <span class="cm-comment"># 如果下载成功（curl返回值为0）</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">break</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">f</span> = <span class="cm-builtin">open</span>(<span class="cm-string">f'{path}temp{start}.bin'</span>, <span class="cm-string">'rb'</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">s</span> = <span class="cm-variable">f</span>.<span class="cm-property">read</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">f</span>.<span class="cm-property">close</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">os</span>.<span class="cm-property">system</span>(<span class="cm-string">f'del {path}temp{start}.bin'</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">return</span> <span class="cm-variable">s</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">while</span> <span class="cm-variable">cnt</span> <span class="cm-operator">&gt;</span> <span class="cm-number">0</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">s</span> = <span class="cm-variable">getrange</span>(<span class="cm-variable">now</span>, <span class="cm-number">8</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">name</span> = <span class="cm-variable">s</span>[<span class="cm-number">4</span>:].<span class="cm-property">decode</span>() <span class="cm-comment"># box名</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">length</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[:<span class="cm-number">4</span>]) <span class="cm-comment"># box大小</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-builtin">print</span>(<span class="cm-variable">name</span>, <span class="cm-variable">length</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">if</span> <span class="cm-variable">name</span> <span class="cm-keyword">in</span> <span class="cm-variable">small</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-number">8</span> <span class="cm-comment"># “进入”该box</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">elif</span> <span class="cm-variable">name</span> == <span class="cm-string">'stsd'</span>: <span class="cm-comment"># 获取sps和pps</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">s</span> = <span class="cm-variable">getrange</span>(<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">7</span> <span class="cm-operator">*</span> <span class="cm-number">16</span> <span class="cm-operator">+</span> <span class="cm-number">4</span>, <span class="cm-variable">length</span> <span class="cm-operator">-</span> <span class="cm-number">7</span> <span class="cm-operator">*</span> <span class="cm-number">16</span> <span class="cm-operator">-</span> <span class="cm-number">4</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">spsl</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;H'</span>, <span class="cm-variable">s</span>[<span class="cm-number">0</span>:<span class="cm-number">2</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">sps</span> = <span class="cm-variable">s</span>[<span class="cm-number">2</span>:<span class="cm-number">2</span> <span class="cm-operator">+</span> <span class="cm-variable">spsl</span>]</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">ppsl</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;H'</span>, <span class="cm-variable">s</span>[<span class="cm-number">2</span> <span class="cm-operator">+</span> <span class="cm-variable">spsl</span> <span class="cm-operator">+</span> <span class="cm-number">1</span>:<span class="cm-variable">spsl</span> <span class="cm-operator">+</span> <span class="cm-number">5</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pps</span> = <span class="cm-variable">s</span>[<span class="cm-variable">spsl</span> <span class="cm-operator">+</span> <span class="cm-number">5</span>:<span class="cm-variable">spsl</span> <span class="cm-operator">+</span> <span class="cm-number">5</span> <span class="cm-operator">+</span> <span class="cm-variable">ppsl</span>]</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cnt</span> -= <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">elif</span> <span class="cm-variable">name</span> == <span class="cm-string">'stsc'</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">s</span> = <span class="cm-variable">getrange</span>(<span class="cm-variable">now</span>, <span class="cm-variable">length</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">count</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">12</span>:<span class="cm-number">16</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-variable">count</span>):</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">fc</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">16</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">12</span>:<span class="cm-number">20</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">12</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">spc</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">20</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">12</span>:<span class="cm-number">24</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">12</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">sample2chunk</span>.<span class="cm-property">append</span>((<span class="cm-variable">fc</span>, <span class="cm-variable">spc</span>))</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cnt</span> -= <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">elif</span> <span class="cm-variable">name</span> == <span class="cm-string">'stco'</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">fraglength</span> = <span class="cm-variable">length</span> <span class="cm-operator">//</span> <span class="cm-number">12</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">frag</span> = [(<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-variable">fraglength</span>, <span class="cm-variable">fraglength</span>) <span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-number">11</span>)] <span class="cm-comment"># 由于这个box比较大，所以对这个box进行分段然后用多线程来处理</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">frag</span>.<span class="cm-property">append</span>((<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">11</span> <span class="cm-operator">*</span> <span class="cm-variable">fraglength</span>, <span class="cm-variable">length</span> <span class="cm-operator">-</span> <span class="cm-number">11</span> <span class="cm-operator">*</span> <span class="cm-variable">fraglength</span>)) <span class="cm-comment"># 最后一段</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pool</span> = <span class="cm-variable">Pool</span>(<span class="cm-number">12</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">r</span> = <span class="cm-variable">pool</span>.<span class="cm-property">map</span>(<span class="cm-keyword">lambda</span> <span class="cm-variable">x</span>: <span class="cm-variable">getrange</span>(<span class="cm-operator">*</span><span class="cm-variable">x</span>), <span class="cm-variable">frag</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pool</span>.<span class="cm-property">close</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pool</span>.<span class="cm-property">join</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">s</span> = <span class="cm-string">b''</span>.<span class="cm-property">join</span>(<span class="cm-variable">r</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">count</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">12</span>:<span class="cm-number">16</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-variable">count</span>):</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">chunk_offset</span>.<span class="cm-property">append</span>(<span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">16</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">4</span>:<span class="cm-number">20</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">4</span>])[<span class="cm-number">0</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cnt</span> -= <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">elif</span> <span class="cm-variable">name</span> == <span class="cm-string">'stsz'</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">fraglength</span> = <span class="cm-variable">length</span> <span class="cm-operator">//</span> <span class="cm-number">12</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">frag</span> = [(<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-variable">fraglength</span>, <span class="cm-variable">fraglength</span>) <span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-number">11</span>)] <span class="cm-comment"># 同上，分段多线程</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">frag</span>.<span class="cm-property">append</span>((<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">11</span> <span class="cm-operator">*</span> <span class="cm-variable">fraglength</span>, <span class="cm-variable">length</span> <span class="cm-operator">-</span> <span class="cm-number">11</span> <span class="cm-operator">*</span> <span class="cm-variable">fraglength</span>))</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pool</span> = <span class="cm-variable">Pool</span>(<span class="cm-number">12</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">r</span> = <span class="cm-variable">pool</span>.<span class="cm-property">map</span>(<span class="cm-keyword">lambda</span> <span class="cm-variable">x</span>: <span class="cm-variable">getrange</span>(<span class="cm-operator">*</span><span class="cm-variable">x</span>), <span class="cm-variable">frag</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pool</span>.<span class="cm-property">close</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">pool</span>.<span class="cm-property">join</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">s</span> = <span class="cm-string">b''</span>.<span class="cm-property">join</span>(<span class="cm-variable">r</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">count</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">16</span>:<span class="cm-number">20</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-variable">count</span>):</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">sample_size</span>.<span class="cm-property">append</span>(<span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">20</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">4</span>:<span class="cm-number">24</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-number">4</span>])[<span class="cm-number">0</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cnt</span> -= <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">elif</span> <span class="cm-variable">name</span> == <span class="cm-string">'stss'</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">s</span> = <span class="cm-variable">getrange</span>(<span class="cm-variable">now</span>, <span class="cm-variable">length</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">count</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">12</span>:<span class="cm-number">16</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">gap</span> = <span class="cm-variable">count</span> <span class="cm-operator">//</span> <span class="cm-variable">img_num</span> <span class="cm-comment"># 选取关键帧的间隔大小</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">num</span> = <span class="cm-variable">count</span> <span class="cm-operator">%</span> <span class="cm-variable">img_num</span> <span class="cm-comment"># 为了尽可能均匀选取，前num个关键帧间隔为gap，后面的关键帧间隔为gap-1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">gap</span> += <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-number">1</span>, <span class="cm-variable">img_num</span> <span class="cm-operator">+</span> <span class="cm-number">1</span>):</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">if</span> <span class="cm-variable">i</span> <span class="cm-operator">&lt;</span>= <span class="cm-variable">num</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">                <span class="cm-variable">key_sample</span>.<span class="cm-property">append</span>(<span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">12</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-variable">gap</span> <span class="cm-operator">*</span> <span class="cm-number">4</span>:<span class="cm-number">16</span> <span class="cm-operator">+</span> <span class="cm-variable">i</span> <span class="cm-operator">*</span> <span class="cm-variable">gap</span> <span class="cm-operator">*</span> <span class="cm-number">4</span>])[<span class="cm-number">0</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">else</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">                <span class="cm-variable">t</span> = (<span class="cm-variable">i</span> <span class="cm-operator">-</span> <span class="cm-variable">num</span>) <span class="cm-operator">*</span> (<span class="cm-variable">gap</span> <span class="cm-operator">-</span> <span class="cm-number">1</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">                <span class="cm-variable">key_sample</span>.<span class="cm-property">append</span>(<span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">s</span>[<span class="cm-number">12</span> <span class="cm-operator">+</span> (<span class="cm-variable">num</span> <span class="cm-operator">*</span> <span class="cm-variable">gap</span> <span class="cm-operator">+</span> <span class="cm-variable">t</span>) <span class="cm-operator">*</span> <span class="cm-number">4</span>:<span class="cm-number">16</span> <span class="cm-operator">+</span> (<span class="cm-variable">num</span> <span class="cm-operator">*</span> <span class="cm-variable">gap</span> <span class="cm-operator">+</span> <span class="cm-variable">t</span>) <span class="cm-operator">*</span> <span class="cm-number">4</span>])[<span class="cm-number">0</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">cnt</span> -= <span class="cm-number">1</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">else</span>: <span class="cm-comment"># 跳过该box</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">now</span> += <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">sample2chunk</span>.<span class="cm-property">append</span>((<span class="cm-builtin">len</span>(<span class="cm-variable">chunk_offset</span>) <span class="cm-operator">+</span> <span class="cm-number">1</span>, <span class="cm-number">0</span>)) <span class="cm-comment"># 添加一个边界</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">for</span> <span class="cm-variable">i</span> <span class="cm-keyword">in</span> <span class="cm-variable">key_sample</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">sample</span> = <span class="cm-number">0</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">first_chunk</span> = (<span class="cm-number">0</span>, <span class="cm-number">0</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">for</span> <span class="cm-variable">j</span> <span class="cm-keyword">in</span> <span class="cm-builtin">range</span>(<span class="cm-builtin">len</span>(<span class="cm-variable">sample2chunk</span>) <span class="cm-operator">-</span> <span class="cm-number">1</span>): <span class="cm-comment"># 获得帧对应的是第几段</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">if</span> <span class="cm-variable">sample</span> <span class="cm-operator">+</span> (<span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span> <span class="cm-operator">+</span> <span class="cm-number">1</span>][<span class="cm-number">0</span>] <span class="cm-operator">-</span> <span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span>][<span class="cm-number">0</span>]) <span class="cm-operator">*</span> <span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span>][<span class="cm-number">1</span>] <span class="cm-operator">&gt;</span>= <span class="cm-variable">i</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">first_chunk</span> = <span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span>]</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-keyword">break</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">else</span>:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">sample</span> += (<span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span> <span class="cm-operator">+</span> <span class="cm-number">1</span>][<span class="cm-number">0</span>] <span class="cm-operator">-</span> <span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span>][<span class="cm-number">0</span>]) <span class="cm-operator">*</span> <span class="cm-variable">sample2chunk</span>[<span class="cm-variable">j</span>][<span class="cm-number">1</span>]</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">true_chunk</span> = (<span class="cm-variable">i</span> <span class="cm-operator">-</span> <span class="cm-variable">sample</span> <span class="cm-operator">-</span> <span class="cm-number">1</span>) <span class="cm-operator">//</span> <span class="cm-variable">first_chunk</span>[<span class="cm-number">1</span>] <span class="cm-operator">+</span> <span class="cm-variable">first_chunk</span>[<span class="cm-number">0</span>] <span class="cm-comment"># 获得帧对应的分块编号</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">sample</span> += (<span class="cm-variable">i</span> <span class="cm-operator">-</span> <span class="cm-variable">sample</span> <span class="cm-operator">-</span> <span class="cm-number">1</span>) <span class="cm-operator">//</span> <span class="cm-variable">first_chunk</span>[<span class="cm-number">1</span>] <span class="cm-operator">*</span> <span class="cm-variable">first_chunk</span>[<span class="cm-number">1</span>] <span class="cm-comment"># 该分块的起始帧编号</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">offset</span> = <span class="cm-number">0</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">for</span> <span class="cm-variable">j</span> <span class="cm-keyword">in</span> <span class="cm-variable">sample_size</span>[<span class="cm-variable">sample</span>:<span class="cm-variable">i</span> <span class="cm-operator">-</span> <span class="cm-number">1</span>]: <span class="cm-comment"># 累加帧在分块中的偏移</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">offset</span> += <span class="cm-variable">j</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">frames</span>.<span class="cm-property">append</span>((<span class="cm-variable">chunk_offset</span>[<span class="cm-variable">true_chunk</span> <span class="cm-operator">-</span> <span class="cm-number">1</span>] <span class="cm-operator">+</span> <span class="cm-variable">offset</span>, <span class="cm-variable">sample_size</span>[<span class="cm-variable">i</span> <span class="cm-operator">-</span> <span class="cm-number">1</span>]))</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">def</span> <span class="cm-def">process_frame</span>(<span class="cm-variable">frame</span>):</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">i</span>, <span class="cm-variable">j</span> = <span class="cm-variable">frame</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">avcc</span> = <span class="cm-variable">getrange</span>(<span class="cm-operator">*</span><span class="cm-variable">j</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">anexb</span> = <span class="cm-string">b''</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">now</span> = <span class="cm-number">0</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">sp</span> = <span class="cm-string">b'\x00\x00\x00\x01'</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-keyword">while</span> <span class="cm-variable">now</span> <span class="cm-operator">&lt;</span> <span class="cm-variable">j</span>[<span class="cm-number">1</span>]:</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-variable">length</span>, = <span class="cm-variable">struct</span>.<span class="cm-property">unpack</span>(<span class="cm-string">'&gt;l'</span>, <span class="cm-variable">avcc</span>[<span class="cm-variable">now</span>:<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">4</span>])</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">if</span> <span class="cm-variable">avcc</span>[<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">4</span>] <span class="cm-operator">!</span>= <span class="cm-number">0x65</span>: <span class="cm-comment"># 其他包</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">anexb</span> += <span class="cm-variable">sp</span> <span class="cm-operator">+</span> <span class="cm-variable">avcc</span>[<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">4</span>:<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">4</span> <span class="cm-operator">+</span> <span class="cm-variable">length</span>]</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">now</span> += <span class="cm-number">4</span> <span class="cm-operator">+</span> <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">        <span class="cm-keyword">else</span>: <span class="cm-comment"># 帧数据包</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">anexb</span> += <span class="cm-variable">sp</span> <span class="cm-operator">+</span> <span class="cm-variable">sps</span> <span class="cm-operator">+</span> <span class="cm-variable">sp</span> <span class="cm-operator">+</span> <span class="cm-variable">pps</span> <span class="cm-operator">+</span> <span class="cm-variable">sp</span> <span class="cm-operator">+</span> <span class="cm-variable">avcc</span>[<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">4</span>:<span class="cm-variable">now</span> <span class="cm-operator">+</span> <span class="cm-number">4</span> <span class="cm-operator">+</span> <span class="cm-variable">length</span>]</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">            <span class="cm-variable">now</span> += <span class="cm-number">4</span> <span class="cm-operator">+</span> <span class="cm-variable">length</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">f</span> = <span class="cm-builtin">open</span>(<span class="cm-string">f'{path}img{i:03d}.bin'</span>, <span class="cm-string">'wb'</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">f</span>.<span class="cm-property">write</span>(<span class="cm-variable">anexb</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">f</span>.<span class="cm-property">close</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">os</span>.<span class="cm-property">system</span>(<span class="cm-string">f'ffmpeg -i {path}img{i:03d}.bin {path}img{i:03d}.jpg'</span>) <span class="cm-comment"># 转码</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;">    <span class="cm-variable">os</span>.<span class="cm-property">system</span>(<span class="cm-string">f'del {path}img{i:03d}.bin'</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">pool</span> = <span class="cm-variable">Pool</span>(<span class="cm-number">12</span>)</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">pool</span>.<span class="cm-property">map</span>(<span class="cm-variable">process_frame</span>, <span class="cm-builtin">list</span>(<span class="cm-builtin">enumerate</span>(<span class="cm-variable">frames</span>))) <span class="cm-comment"># 获取帧数据和转换过程用多线程并行</span></span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">pool</span>.<span class="cm-property">close</span>()</span></pre><pre class="CodeMirror-line" role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">pool</span>.<span class="cm-property">join</span>()</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 3270px;"></div><div class="CodeMirror-gutters" style="display: none; height: 3270px;"></div></div></div></pre><h3><a class="md-header-anchor" name="后记"></a><span>后记</span></h3><p><span>注意该程序默认视频图像流在音频流前面，因为图片流和音频流的父box名都是trak，所以如果音频流在前面可能程序会运行出错。</span></p><p><span>本篇文章没有对mp4的详细格式进行完整介绍，如果想了解可以参考网上的其他博客，最好的方法是下载一个mp4格式检查器（如mp4 Inspector），它可以自动显示mp4里的box结构，并以十六进制显示box里内容，这样看的更清楚明白。</span></p></div>
+
+<span class="bg-light text-muted border boder-primary d-block p-2 text-center">
+    转载请注明出处<br/>
+    © 2020 ZimingYuan的博客
+</span>
+<div style="background-color: #ebd5a1; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; opacity: 0.2;">
+</div>
+</body>
+</html>
